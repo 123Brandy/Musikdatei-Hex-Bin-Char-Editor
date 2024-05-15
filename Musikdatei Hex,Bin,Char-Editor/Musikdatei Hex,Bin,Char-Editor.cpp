@@ -12,11 +12,27 @@
 #include <iomanip>
 #include <shlobj.h>
 
+
+// --------------------------------------------------------------
+// Nachfolgend werden zur Übersichtlichkeit Konstanten definiert
+// --------------------------------------------------------------
+// ---------------------------------------------------------------
+// Konstante für die Zeitverzögerung in Millisekunden
+// Damit der Text in der Konsole gelesen werden kann (2 Sekunden)
+// ---------------------------------------------------------------
+const int WAIT_TIME_MS = 2000;
+
+// ------------------------------------------
+// Konstanten für die Ausgabe der Textfarben
+// ------------------------------------------
+const int COLOR_RED = FOREGROUND_RED | FOREGROUND_INTENSITY;
+const int COLOR_GREEN = FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+const int COLOR_DEFAULT = FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+
 // ---------------------------------------------------------------------
 // Nachfolgend werden Funktionen erstellet,
 // welche für die weitere Verarbeitung im Hauptprogramm benötigt werden
 // ---------------------------------------------------------------------
-
 // -----------------------------------------------------------------
 // Erstellen einer Funktion zum Ändern der Textfarbe in der Konsole
 // -----------------------------------------------------------------
@@ -69,7 +85,7 @@ int main() {
         wchar_t* wideGreeting = new wchar_t[len];
         MultiByteToWideChar(CP_ACP, 0, greeting, -1, wideGreeting, len);
         std::wcout << wideGreeting << std::endl;
-        Sleep(2000); // Kurze Verweilzeit, damit der Text in der Konsole gelesen werden kann (2 Sekunden)
+        Sleep(WAIT_TIME_MS); 
 
         // --------------------------------------
         // Buffer für den ausgewählten Dateipfad
@@ -111,9 +127,9 @@ int main() {
                 optionText = L"Char";
             }
             else {
-                setConsoleColor(FOREGROUND_RED);
+                setConsoleColor(COLOR_RED);
                 std::cout << "Ungueltiges Format ausgewaehlt. Versuchen Sie es bitte erneut." << std::endl;
-                setConsoleColor(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                setConsoleColor(COLOR_DEFAULT);
                 delete[] wideGreeting;
                 return 1;
             }
@@ -123,7 +139,7 @@ int main() {
             // Der Hinweis wird nun in der Konsole ausgegeben.
             // --------------------------------------------------------------------------------------------------
             std::cout << "Bitte waehlen Sie einen Zielordner zum Speichern der Datei aus." << std::endl;
-            Sleep(2000); // Kurze Verweilzeit, damit der Text in der Konsole gelesen werden kann (2 Sekunden)
+            Sleep(WAIT_TIME_MS);
 
             // ------------------------
             // Auswahl des Zielordners
@@ -137,7 +153,7 @@ int main() {
                 // Einen Dateinamen wählen
                 // ------------------------
                 do {
-                    std::wcout << L"Bitte geben Sie den Dateinamen für die Ausgabedatei an (zusammenhaengendes Wort waehlen): ";
+                    std::wcout << L"Bitte geben Sie den Dateinamen fuer die Ausgabedatei an (zusammenhaengendes Wort waehlen): ";
                     std::wcin >> outputFile;
                     outputFile = outputFolderPath + L"\\" + outputFile + L".txt";
 
@@ -167,9 +183,9 @@ int main() {
                                     overwrite = true;
                                 }
                                 else {
-                                    setConsoleColor(FOREGROUND_RED);
+                                    setConsoleColor(COLOR_RED);
                                     std::cout << "Verarbeitung abgebrochen." << std::endl;
-                                    setConsoleColor(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                                    setConsoleColor(COLOR_DEFAULT);
                                     continueProcessing = false;
                                     break;
                                 }
@@ -190,9 +206,9 @@ int main() {
                 // -------------------------------------------------------------------------------------------------------------------------
                 // Während der Prozess der Speicherung durchgeführt wird, erscheint in der Konsole eine Warte-Nachricht (in der Farbe grün)
                 // -------------------------------------------------------------------------------------------------------------------------
-                setConsoleColor(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                setConsoleColor(COLOR_GREEN);
                 std::cout << "Bitte haben Sie einen Moment Geduld, die Datei wird soeben gespeichert..." << std::endl;
-                setConsoleColor(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                setConsoleColor(COLOR_DEFAULT);
 
                 // ------------------------------------------------------
                 // Textdatei für die Ausgabe öffnen (oder überschreiben)
@@ -278,26 +294,26 @@ int main() {
                     // ---------------------------------------------------------------------------------------------------------
                     // Nach erfolgreicher Speicherung in der Textdatei, wird dies in der Konsole ausgegeben (in der Farbe grün)
                     // ---------------------------------------------------------------------------------------------------------
-                    setConsoleColor(FOREGROUND_GREEN);
+                    setConsoleColor(COLOR_GREEN);
                     std::wcout << L"Auswertung erfolgreich gespeichert." << std::endl;
-                    setConsoleColor(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                    setConsoleColor(COLOR_DEFAULT);
                 }
                 // ------------------------------------------------------------------------------------------
                 // Fehlermeldung ausgeben, wenn ein Fehler beim öffnen der Datei auftritt (in der Farbe rot)
                 // ------------------------------------------------------------------------------------------
                 else {
-                    setConsoleColor(FOREGROUND_RED);
+                    setConsoleColor(COLOR_RED);
                     std::cout << "Fehler beim Oeffnen der Ausgabedatei." << std::endl;
-                    setConsoleColor(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                    setConsoleColor(COLOR_DEFAULT);
                 }
             }
             // ------------------------------------------------------------------------------------------------------------
             // Fehlermeldung ausgeben, wenn die Ordnerauswahl abgebrochen wurde oder fehlgeschlagen ist (in der Farbe rot)
             // ------------------------------------------------------------------------------------------------------------
             else {
-                setConsoleColor(FOREGROUND_RED);
+                setConsoleColor(COLOR_RED);
                 std::cout << "Ordnerauswahl abgebrochen oder fehlgeschlagen." << std::endl;
-                setConsoleColor(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                setConsoleColor(COLOR_DEFAULT);
                 continueProcessing = false;
                 break;
             }
@@ -306,9 +322,9 @@ int main() {
         // Fehlermeldung ausgeben, wenn die Dateiauswahl abgebrochen wurde oder fehlgeschlagen ist (in der Farbe rot)
         // -----------------------------------------------------------------------------------------------------------
         else {
-            setConsoleColor(FOREGROUND_RED);
+            setConsoleColor(COLOR_RED);
             std::cout << "Dateiauswahl abgebrochen oder fehlgeschlagen." << std::endl;
-            setConsoleColor(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+            setConsoleColor(COLOR_DEFAULT);
             continueProcessing = false;
             break;
         }
@@ -329,7 +345,7 @@ int main() {
 
         if (userInput.compare("Nein") == 0 || userInput.compare("nein") == 0) {
             std::cout << "Vielen Dank und auf Wiedersehen!" << std::endl;
-            Sleep(2000);
+            Sleep(WAIT_TIME_MS);
             break;
         }
 
